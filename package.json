@@ -1,0 +1,27 @@
+{
+  "name": "gathern-automation",
+  "version": "1.0.0",
+  "description": "Cypress E2E automation project for Gathern web app using Page Object Model pattern",
+  "main": "index.js",
+  "scripts": {
+    "cypress:run:property-search": "cypress run --spec cypress/e2e/property-search.cy.js",
+    "cypress:run:headed:property-search": "cypress run --headed --spec cypress/e2e/property-search.cy.js",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:run:headed": "cypress run --headed",
+    "test": "cypress run"
+  },
+  "keywords": [
+    "cypress",
+    "e2e",
+    "automation",
+    "testing"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^13.6.0",
+    "dotenv": "^17.2.3",
+    "twilio": "^5.11.1"
+  }
+}

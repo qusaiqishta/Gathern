@@ -1,12 +1,11 @@
 pipeline {
     agent any
 
-    // Parameters for manual build input
     parameters {
         string(
             name: 'SPEC',
             defaultValue: 'cypress/e2e/**',
-            description: 'Enter the script path to execute'
+            description: 'Enter the spec path to execute'
         )
         choice(
             name: 'BROWSER',
@@ -15,12 +14,6 @@ pipeline {
         )
     }
 
-    // Top-level options
-    options {
-        ansiColor('xterm')
-    }
-
-    // Stages must be top-level
     stages {
 
         stage('Build') {
@@ -32,7 +25,7 @@ pipeline {
         stage('Testing') {
             steps {
                 bat 'npm install'
-                bat "npx cypress run --browser %BROWSER% --spec \"%SPEC%\""
+                bat "npx cypress run --browser ${params.BROWSER} --spec \"${params.SPEC}\""
             }
         }
 
@@ -43,7 +36,6 @@ pipeline {
         }
     }
 
-    // Post actions
     post {
         always {  
             publishHTML([
@@ -52,7 +44,7 @@ pipeline {
                 keepAll: true,
                 reportDir: 'cypress/report',
                 reportFiles: 'index.html',
-                reportName: 'HTML Report'
+                reportName: 'Cypress HTML Report'
             ])
         }
     }

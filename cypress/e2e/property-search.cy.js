@@ -17,9 +17,8 @@ describe('Property Search Flow', () => {
     interceptFilterConfig();
     interceptResultsData();
     // Visit the Gathern website
-    cy.visit(Cypress.config('baseUrl'));
-    // Wait for page to load
-    homePage.waitForPageLoad();
+    homePage.visit('/')
+ 
   });
 
   it('should search for properties using helper functions', () => {
@@ -27,7 +26,6 @@ describe('Property Search Flow', () => {
     homePage.verifySearchFormDisplayed();
 
     // Step 1: Select a random Saudi city using helper function
-    // Note: Update these selectors with actual selectors from the website
     const selectedCity = selectRandomSaudiCity();
     cy.log(`Selected city: ${selectedCity}`);
 
@@ -46,8 +44,6 @@ describe('Property Search Flow', () => {
     cy.log(`Selected check-out date: ${checkOutDate.formattedDate} (${checkOutDate.daysAhead} days ahead)`);
 
     // Step 4: Select property type using helper function
-    // Note: This assumes there's a property type selector on the home page
-    // If it's on a different page or modal, adjust accordingly
     const selectedPropertyType = selectPropertyType();
     cy.log(`Selected property type: ${selectedPropertyType}`);
 
@@ -63,10 +59,20 @@ describe('Property Search Flow', () => {
       cy.log(`Found ${count} properties`);
       expect(count).to.be.greaterThan(0);
     });
-
+    //apply some filters on the results 
+    const filtersOptions = {
+      priceRange: { min: 300 },
+      offerDiscount: true,     
+      noInsurance: true,       
+      propertyTypes: ['Resort','Chalet','Farm','Camp'],
+      amenities: ['Internet', 'TV'] 
+    };
+    searchResultsPage.applyFilters(filtersOptions)
+// verify that the results deisplayed on the UI matched what comes from the API
     searchResultsPage.verifyAllCardsMatchApiData();
     interceptPropertyDetails();
     searchResultsPage.SelectRandomProperty();
+    //verify the details for specific property
     propertyDetailsPage.verifyPropertyDetails();
   });
 });

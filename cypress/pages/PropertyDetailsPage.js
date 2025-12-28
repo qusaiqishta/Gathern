@@ -47,35 +47,6 @@ class PropertyDetailsPage extends BasePage {
   };
 
   /**
-   * Select check-in and check-out dates
-   * @param {string} checkIn - Check-in date
-   * @param {string} checkOut - Check-out date
-   */
-  selectDates(checkIn, checkOut) {
-    if (checkIn) {
-      this.click(this.selectors.booking.checkInDate);
-      // Additional logic for date selection would go here
-      cy.get(this.selectors.booking.calendar).within(() => {
-        // Date picker interaction logic
-      });
-    }
-    if (checkOut) {
-      this.click(this.selectors.booking.checkOutDate);
-      // Additional logic for date selection would go here
-    }
-  }
-
-  /**
-   * Select number of guests
-   * @param {number} count - Number of guests
-   */
-  selectGuests(count) {
-    this.click(this.selectors.booking.guestSelector);
-    // Logic to increment/decrement guest count
-    cy.get(this.selectors.booking.guestCount).should('contain', count.toString());
-  }
-
-  /**
    * Click the book button
    */
   clickBookButton() {

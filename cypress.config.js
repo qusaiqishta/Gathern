@@ -3,6 +3,14 @@ const { defineConfig } = require('cypress');
 module.exports = defineConfig({
   e2e: {
     baseUrl: 'https://gathern.co/en',
+    blockHosts:[
+      'https://www.googletagmanager.com',
+       'https://tr.snapchat.com',
+       'https://www.google.com/ccm',
+       'https://googleads.g.doubleclick.net',
+       'https://www.google-analytics.com',
+       'https://www.google.com/measurement'
+    ],
     viewportWidth: 1280,
     viewportHeight: 720,
     video: true,

@@ -65,10 +65,10 @@ class BasePage {
    * @param {string} selector - Element selector
    * @param {string} text - Expected text
    */
-  verifyElementText(selector, text) {
+ verifyElementText(selector, text) {
     cy.get(selector).should('contain', text);
   }
-
+ 
   /**
    * Select option from dropdown
    * @param {string} selector - Dropdown selector

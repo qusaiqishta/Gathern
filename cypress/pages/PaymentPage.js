@@ -15,9 +15,9 @@ class PaymentPage extends BasePage {
     paymentMethod: {
       container: '[data-testid="payment-method-container"]',
       creditCard: '[data-testid="payment-credit-card"]',
-      debitCard: '[data-testid="payment-debit-card"]',
-      paypal: '[data-testid="payment-paypal"]',
-      other: '[data-testid="payment-other"]',
+      tamara: '[data-testid="payment-tamara"]',
+      tabby: '[data-testid="payment-tabby"]',
+      applePay: '[data-testid="applePay"]',
     },
     cardDetails: {
       cardNumber: '[data-testid="card-number"]',

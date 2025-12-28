@@ -15,11 +15,14 @@ class SearchResultsPage extends BasePage {
       propertyImage: '[data-testid="property-image"]',
     },
     filters: {
-      container: '[data-testid="filters-container"]',
+      filtersButton:'.mobile-search-buttons-container button:first-child',
+      container: '[data-test="sentinelStart"] ~ div',
       priceRange: '[data-testid="price-range-filter"]',
-      propertyType: '[data-testid="property-type-filter"]',
-      amenities: '[data-testid="amenities-filter"]',
-      applyButton: '[data-testid="apply-filters-button"]',
+      propertyType: 'div.MuiDialog-container.MuiDialog-scrollPaper > div > div.MuiDialogContent-root.ltr-pixbia > div > div > div > div.MuiBox-root.jss4706.ltr-1hdbc19.eyq2vs40 > div > div > div',
+      amenities: 'div.MuiDialog-container.MuiDialog-scrollPaper > div > div.MuiDialogContent-root.ltr-pixbia > div > div > div > div.MuiBox-root.jss4776.ltr-1hdbc19.eyq2vs40 > div > div',
+      applyButton: 'div.MuiDialogActions-root button:first-child',
+      offerDiscount:'input.MuiSwitch-input',
+      noInsurance:'input.MuiSwitch-input'
     },
     sort: {
       dropdown: '[data-testid="sort-dropdown"]',
@@ -44,7 +47,10 @@ class SearchResultsPage extends BasePage {
   selectProperty(index = 0) {
     cy.get(this.selectors.propertyCards.card)
       .eq(index)
+      .scrollIntoView()
       .should('be.visible')
+      .find('a[target]')
+      .invoke('attr', 'target', '_self')
       .click();
   }
 
@@ -63,18 +69,40 @@ class SearchResultsPage extends BasePage {
    * @param {object} filterOptions - Object containing filter options
    */
   applyFilters(filterOptions) {
-    if (filterOptions.priceRange) {
-      // Logic to set price range
-      cy.get(this.selectors.filters.priceRange).within(() => {
-        // Price range selection logic
-      });
+    this.click(this.selectors.filters.filtersButton);
+    // Set the price range slider's minimum value dynamically
+    
+    if (typeof filterOptions?.priceRange?.min === 'number') {
+      cy.get('span[role="slider"][aria-labelledby="range-slider"]', { timeout: 10000 })
+      .eq(4).click();
+      const movements= (filterOptions.priceRange.min/50) -1
+      for(let i =0;i<movements;i++){
+          cy.get('span[role="slider"][aria-labelledby="range-slider"]')
+          .eq(4)
+          .type('{rightarrow}');
+      }
     }
-    if (filterOptions.propertyType) {
-      cy.get(this.selectors.filters.propertyType).select(filterOptions.propertyType);
+    
+    
+    if (filterOptions.offerDiscount) {
+      cy.get(this.selectors.filters.offerDiscount).first()
+        .check({ force: true });
+    }
+    if (filterOptions.noInsurance) {
+      cy.get(this.selectors.filters.noInsurance).eq(1)
+        .check({ force: true });
+    }
+    
+    if (filterOptions.propertyTypes) {
+      filterOptions.propertyTypes.forEach((property) => {
+        cy.get(this.selectors.filters.container).first()
+          .contains(property)
+          .click();
+      });
     }
     if (filterOptions.amenities) {
       filterOptions.amenities.forEach((amenity) => {
-        cy.get(this.selectors.filters.amenities)
+        cy.get(this.selectors.filters.container).first()
           .contains(amenity)
           .click();
       });
@@ -155,13 +183,7 @@ SelectRandomProperty() {
   cy.get(this.selectors.propertyCards.card).then($cards => {
     const cardsCount = $cards.length;
     const index = Math.floor(Math.random() * cardsCount);
-    cy.wrap($cards)
-      .eq(index)
-      .scrollIntoView()
-      .should('be.visible')
-      .find('a[target]')
-      .invoke('attr', 'target', '_self')
-      .click();
+    this.selectProperty(index);
   });
   verifyUrlContains('/unit')
 }

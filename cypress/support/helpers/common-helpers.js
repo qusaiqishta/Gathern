@@ -144,7 +144,7 @@ export function selectRandomSaudiCity() {
   
   // Clear and type the city name in the input field
   cy.get(homePage.selectors.searchForm.locationInput).should('be.visible').click();
-  cy.get(homePage.selectors.searchForm.citySearchInput).should('be.visible').type(randomCity);
+  cy.get(homePage.selectors.searchForm.citySearchInput,{timeout:10000}).should('be.visible').type(randomCity);
   // Wait for dropdown options to appear and select the city using contains
   cy.get(homePage.selectors.searchForm.dropdownOptionsSelector, { timeout: 5000 })
     .should('be.visible')
